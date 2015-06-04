@@ -6,7 +6,7 @@
 ;; Version: 0.0.1
 ;; Keywords: docs RFC IETF
 ;; Homepage: https://github.com/kai2nenobu/irfc-x
-;; Package-Requires: ((emacs "24.1") ("irfc" "0.5.6"))
+;; Package-Requires: ((emacs "24.1") (irfc "0.5.6"))
 
 ;; This file is not part of GNU Emacs.
 
