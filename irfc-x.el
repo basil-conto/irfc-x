@@ -42,25 +42,22 @@
 (require 'irfc)
 
 (defvar irfc-x--rfc-entries-cache nil)
-(defconst irfc-index-url (concat irfc-download-base-url "rfc-index.xml"))
+(defconst irfc-x--index-url (concat irfc-download-base-url "rfc-index.xml"))
 
-(defun irfc-index-file (&optional dummy)
-  ""
+(defun irfc--index-file (&optional dummy)
+  "Return a location of the index xml.
+DUMMY is a dummy variable for `url-cache-creation-function'."
   (expand-file-name "rfc-index.xml" irfc-directory))
 
-(defun irfc-x--clear-rfc-entries-cache ()
-  ""
-  (setq irfc-x--rfc-entries-cache nil))
-
-(defun irfc-ensure-index-file ()
-  "Ensure that a index file exists.  If not, download the index xml."
+(defun irfc-x--ensure-index-file ()
+  "Ensure that a index file exists.  If not exist, download it."
   ;; TODO: consider in offline environment
   (make-directory (file-name-directory (irfc-index-file)) :force)
   (let ((url-cache-creation-function #'irfc-index-file)) ; treat a downloaded index as cache
     (url-copy-file irfc-index-url (irfc-index-file) t t)))
 
 (defun irfc-x--parse-index ()
-  ""
+  "Return rfc entries in a index file."
   (irfc-ensure-index-file)
   (with-temp-buffer
     (insert-file-contents (irfc-index-file))
@@ -74,20 +71,20 @@
             rfc-entries)
       rfc-entries)))
 
-(defun irfc-x--rfc-entries ()
-  "Return rfc entries or cache if exist."
+(defun irfc-x-rfc-entries ()
+  "Return rfc entries in a index file.
+If a cache doesn't exist, parse the index file."
   (or irfc-x--rfc-entries-cache
       (setq irfc-x--rfc-entries-cache (irfc-x--parse-index))))
 
 (defun irfc-x-real-to-display (rfc-entry)
-  ""
+  "Convert RFC-ENTRY to a string representation."
   (concat (propertize (format "[%s]" (irfc-x--rfc-child-value rfc-entry 'doc-id))
                       'face 'font-lock-keyword-face)
           " "
           (irfc-x--rfc-child-value rfc-entry 'title)))
 
 (defun irfc-x--rfc-child-value (rfc-entry child-name)
-  ""
   (let ((nodes (xml-get-children rfc-entry child-name)))
     (unless (= (length nodes) 1)
       (error (format "Invalid rfc-entry: multiple <%s> tags" child-name)))
@@ -99,12 +96,12 @@
 
 ;;;###autoload
 (defun irfc-x-list ()
-  "List up all RFC and visit one of them in `irfc-mode'."
+  "Prompt all RFCs and visit one of them."
   (interactive)
   (let* ((completion-ignore-case t)
          (input (completing-read
                  "Choose one of RFC: "
-                 (mapcar #'irfc-x-real-to-display (irfc-x--rfc-entries))
+                 (mapcar #'irfc-x-real-to-display (irfc-x-rfc-entries))
                  nil ; predicate
                  :require-match)))
     (if (string-match "\\[RFC\\([0-9]+\\)\\]" input)
