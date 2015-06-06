@@ -25,9 +25,13 @@
 
 ;;; Commentary:
 
-;; Feature List
-;; - Download the index xml of RFC
-;; - List up all RFC and visit one of them in `irfc-mode'
+;; This library provides `irfc-x-list' command. Its feature is to
+;; - Download the index xml of RFCs automatically
+;; - List all RFCs (You don't remember the number of RFC any more)
+;;
+;; * Requirements
+;; - irfc.el
+;; - Emacs compiled with libxml2 support (version 24.1 or higher)
 
 ;;; Code:
 
