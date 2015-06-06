@@ -35,6 +35,9 @@
 
 ;;; Code:
 
+(unless (fboundp 'libxml-parse-xml-region)
+  (error "irfc-x requires Emacs compiled with libxml2"))
+
 (require 'xml)
 (require 'irfc)
 
@@ -58,8 +61,6 @@
 
 (defun irfc-x--parse-index ()
   ""
-  (unless (fboundp 'libxml-parse-xml-region)
-    (error "This function requires Emacs to be compiled with libxml2"))
   (irfc-ensure-index-file)
   (with-temp-buffer
     (insert-file-contents (irfc-index-file))
