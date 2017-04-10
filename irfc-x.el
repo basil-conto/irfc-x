@@ -30,8 +30,21 @@
 ;; - List all RFCs (You don't remember the number of RFC any more)
 ;;
 ;; * Requirements
-;; - irfc.el
-;; - Emacs compiled with libxml2 support (version 24.1 or higher)
+;;   - irfc.el
+;;   - Emacs compiled with libxml2 support (version 24.1 or higher)
+;;
+;; * TODO
+;;   - Upload to MELPA
+;;   - Allow customising:
+;;     + Saving index file
+;;       - Remote name
+;;       - Retrieval method
+;;       - Where / whether to ask before creating save location
+;;       - Whether to compress
+;;     + Faces
+;;   - Support or integrate with ivy/counsel/helm completion
+;;   - Smarter caching
+;;   - Cache flushing
 
 ;;; Code:
 
