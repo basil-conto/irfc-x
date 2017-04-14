@@ -52,15 +52,15 @@ DUMMY is a dummy variable for `url-cache-creation-function'."
 (defun irfc-x--ensure-index-file ()
   "Ensure that a index file exists.  If not exist, download it."
   ;; TODO: consider in offline environment
-  (make-directory (file-name-directory (irfc-index-file)) :force)
-  (let ((url-cache-creation-function #'irfc-index-file)) ; treat a downloaded index as cache
-    (url-copy-file irfc-index-url (irfc-index-file) t t)))
+  (make-directory (file-name-directory (irfc--index-file)) :force)
+  (let ((url-cache-creation-function #'irfc--index-file)) ; treat a downloaded index as cache
+    (url-copy-file irfc-x--index-url (irfc--index-file) t t)))
 
 (defun irfc-x--parse-index ()
   "Return rfc entries in a index file."
-  (irfc-ensure-index-file)
+  (irfc-x--ensure-index-file)
   (with-temp-buffer
-    (insert-file-contents (irfc-index-file))
+    (insert-file-contents (irfc--index-file))
     (let* ((index-tree (libxml-parse-xml-region (point-min) (point-max)))
            (rfc-entries (xml-get-children index-tree 'rfc-entry)))
       (mapc (lambda (rfc-entry)
